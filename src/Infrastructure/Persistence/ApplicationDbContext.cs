@@ -31,6 +31,12 @@ public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, 
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
 
+    public DbSet<Artist> Artists => Set<Artist>();
+
+    public DbSet<Album> Albums => Set<Album>();
+
+    public DbSet<Song> Songs => Set<Song>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

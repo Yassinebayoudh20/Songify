@@ -9,5 +9,11 @@ public interface IApplicationDbContext
 
     DbSet<TodoItem> TodoItems { get; }
 
+    DbSet<Artist> Artists { get; }
+
+    DbSet<Album> Albums { get; }
+
+    DbSet<Song> Songs { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
