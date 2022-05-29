@@ -5,7 +5,6 @@
         <RootNamespace>projects.Application</RootNamespace>
         <AssemblyName>projects.Application</AssemblyName>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
