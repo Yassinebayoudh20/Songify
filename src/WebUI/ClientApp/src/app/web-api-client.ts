@@ -15,6 +15,282 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface ISongsClient {
+    findAll(): Observable<SongsListVm>;
+    create(command: CreateSongCommand): Observable<number>;
+    findById(id: number): Observable<SongDetailsVm>;
+    update(id: number, command: UpdateSongCommand): Observable<FileResponse>;
+    delete(id: number): Observable<FileResponse>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class SongsClient implements ISongsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    findAll(): Observable<SongsListVm> {
+        let url_ = this.baseUrl + "/api/Songs";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFindAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFindAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SongsListVm>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SongsListVm>;
+        }));
+    }
+
+    protected processFindAll(response: HttpResponseBase): Observable<SongsListVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SongsListVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SongsListVm>(null as any);
+    }
+
+    create(command: CreateSongCommand): Observable<number> {
+        let url_ = this.baseUrl + "/api/Songs";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processCreate(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : <any>null;
+    
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<number>(null as any);
+    }
+
+    findById(id: number): Observable<SongDetailsVm> {
+        let url_ = this.baseUrl + "/api/Songs/{Id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{Id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFindById(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFindById(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<SongDetailsVm>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<SongDetailsVm>;
+        }));
+    }
+
+    protected processFindById(response: HttpResponseBase): Observable<SongDetailsVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = SongDetailsVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SongDetailsVm>(null as any);
+    }
+
+    update(id: number, command: UpdateSongCommand): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Songs/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(command);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("put", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processUpdate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processUpdate(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FileResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FileResponse>;
+        }));
+    }
+
+    protected processUpdate(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(null as any);
+    }
+
+    delete(id: number): Observable<FileResponse> {
+        let url_ = this.baseUrl + "/api/Songs/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/octet-stream"
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processDelete(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processDelete(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<FileResponse>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<FileResponse>;
+        }));
+    }
+
+    protected processDelete(response: HttpResponseBase): Observable<FileResponse> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200 || status === 206) {
+            const contentDisposition = response.headers ? response.headers.get("content-disposition") : undefined;
+            const fileNameMatch = contentDisposition ? /filename="?([^"]*?)"?(;|$)/g.exec(contentDisposition) : undefined;
+            const fileName = fileNameMatch && fileNameMatch.length > 1 ? fileNameMatch[1] : undefined;
+            return _observableOf({ fileName: fileName, data: responseBlob as any, status: status, headers: _headers });
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<FileResponse>(null as any);
+    }
+}
+
 export interface ITodoItemsClient {
     getTodoItemsWithPagination(listId: number | undefined, pageNumber: number | undefined, pageSize: number | undefined): Observable<PaginatedListOfTodoItemBriefDto>;
     create(command: CreateTodoItemCommand): Observable<number>;
@@ -653,8 +929,220 @@ export class WeatherForecastClient implements IWeatherForecastClient {
     }
 }
 
+export class SongsListVm implements ISongsListVm {
+    songs?: SongDto[] | undefined;
+    count?: number;
+
+    constructor(data?: ISongsListVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["songs"])) {
+                this.songs = [] as any;
+                for (let item of _data["songs"])
+                    this.songs!.push(SongDto.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): SongsListVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new SongsListVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.songs)) {
+            data["songs"] = [];
+            for (let item of this.songs)
+                data["songs"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface ISongsListVm {
+    songs?: SongDto[] | undefined;
+    count?: number;
+}
+
+export class SongDto implements ISongDto {
+    id?: number;
+    title?: string | undefined;
+    image?: string | undefined;
+
+    constructor(data?: ISongDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.image = _data["image"];
+        }
+    }
+
+    static fromJS(data: any): SongDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SongDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["image"] = this.image;
+        return data;
+    }
+}
+
+export interface ISongDto {
+    id?: number;
+    title?: string | undefined;
+    image?: string | undefined;
+}
+
+export class SongDetailsVm implements ISongDetailsVm {
+    songDetails?: SongDto | undefined;
+
+    constructor(data?: ISongDetailsVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.songDetails = _data["songDetails"] ? SongDto.fromJS(_data["songDetails"]) : <any>undefined;
+        }
+    }
+
+    static fromJS(data: any): SongDetailsVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new SongDetailsVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["songDetails"] = this.songDetails ? this.songDetails.toJSON() : <any>undefined;
+        return data;
+    }
+}
+
+export interface ISongDetailsVm {
+    songDetails?: SongDto | undefined;
+}
+
+export class CreateSongCommand implements ICreateSongCommand {
+    title?: string | undefined;
+    image?: string | undefined;
+
+    constructor(data?: ICreateSongCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+            this.image = _data["image"];
+        }
+    }
+
+    static fromJS(data: any): CreateSongCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new CreateSongCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        data["image"] = this.image;
+        return data;
+    }
+}
+
+export interface ICreateSongCommand {
+    title?: string | undefined;
+    image?: string | undefined;
+}
+
+export class UpdateSongCommand implements IUpdateSongCommand {
+    id?: number;
+    title?: string | undefined;
+    image?: string | undefined;
+
+    constructor(data?: IUpdateSongCommand) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.title = _data["title"];
+            this.image = _data["image"];
+        }
+    }
+
+    static fromJS(data: any): UpdateSongCommand {
+        data = typeof data === 'object' ? data : {};
+        let result = new UpdateSongCommand();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["title"] = this.title;
+        data["image"] = this.image;
+        return data;
+    }
+}
+
+export interface IUpdateSongCommand {
+    id?: number;
+    title?: string | undefined;
+    image?: string | undefined;
+}
+
 export class PaginatedListOfTodoItemBriefDto implements IPaginatedListOfTodoItemBriefDto {
-    items?: TodoItemBriefDto[];
+    items?: TodoItemBriefDto[] | undefined;
     pageNumber?: number;
     totalPages?: number;
     totalCount?: number;
@@ -709,7 +1197,7 @@ export class PaginatedListOfTodoItemBriefDto implements IPaginatedListOfTodoItem
 }
 
 export interface IPaginatedListOfTodoItemBriefDto {
-    items?: TodoItemBriefDto[];
+    items?: TodoItemBriefDto[] | undefined;
     pageNumber?: number;
     totalPages?: number;
     totalCount?: number;
@@ -905,8 +1393,8 @@ export enum PriorityLevel {
 }
 
 export class TodosVm implements ITodosVm {
-    priorityLevels?: PriorityLevelDto[];
-    lists?: TodoListDto[];
+    priorityLevels?: PriorityLevelDto[] | undefined;
+    lists?: TodoListDto[] | undefined;
 
     constructor(data?: ITodosVm) {
         if (data) {
@@ -956,8 +1444,8 @@ export class TodosVm implements ITodosVm {
 }
 
 export interface ITodosVm {
-    priorityLevels?: PriorityLevelDto[];
-    lists?: TodoListDto[];
+    priorityLevels?: PriorityLevelDto[] | undefined;
+    lists?: TodoListDto[] | undefined;
 }
 
 export class PriorityLevelDto implements IPriorityLevelDto {
@@ -1004,7 +1492,7 @@ export class TodoListDto implements ITodoListDto {
     id?: number;
     title?: string | undefined;
     colour?: string | undefined;
-    items?: TodoItemDto[];
+    items?: TodoItemDto[] | undefined;
 
     constructor(data?: ITodoListDto) {
         if (data) {
@@ -1053,7 +1541,7 @@ export interface ITodoListDto {
     id?: number;
     title?: string | undefined;
     colour?: string | undefined;
-    items?: TodoItemDto[];
+    items?: TodoItemDto[] | undefined;
 }
 
 export class TodoItemDto implements ITodoItemDto {

@@ -4,7 +4,6 @@
         <TargetFramework>net6.0</TargetFramework>
         <RootNamespace>projects.WebUI</RootNamespace>
         <AssemblyName>projects.WebUI</AssemblyName>
-        <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
         <SpaRoot>ClientApp\</SpaRoot>
         <SpaProxyServerUrl>https://localhost:44447</SpaProxyServerUrl>
