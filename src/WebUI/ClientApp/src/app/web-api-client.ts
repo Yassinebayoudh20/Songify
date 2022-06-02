@@ -15,6 +15,72 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
+export interface IArtistsClient {
+    findAll(): Observable<ArtistListVm>;
+}
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ArtistsClient implements IArtistsClient {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
+    }
+
+    findAll(): Observable<ArtistListVm> {
+        let url_ = this.baseUrl + "/api/Artists";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "application/json"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processFindAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processFindAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<ArtistListVm>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<ArtistListVm>;
+        }));
+    }
+
+    protected processFindAll(response: HttpResponseBase): Observable<ArtistListVm> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+            result200 = ArtistListVm.fromJS(resultData200);
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<ArtistListVm>(null as any);
+    }
+}
+
 export interface ISongsClient {
     findAll(): Observable<SongsListVm>;
     create(command: CreateSongCommand): Observable<number>;
@@ -927,6 +993,146 @@ export class WeatherForecastClient implements IWeatherForecastClient {
         }
         return _observableOf<WeatherForecast[]>(null as any);
     }
+}
+
+export class ArtistListVm implements IArtistListVm {
+    artists?: ArtistDto[] | undefined;
+    count?: number;
+
+    constructor(data?: IArtistListVm) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["artists"])) {
+                this.artists = [] as any;
+                for (let item of _data["artists"])
+                    this.artists!.push(ArtistDto.fromJS(item));
+            }
+            this.count = _data["count"];
+        }
+    }
+
+    static fromJS(data: any): ArtistListVm {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArtistListVm();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.artists)) {
+            data["artists"] = [];
+            for (let item of this.artists)
+                data["artists"].push(item.toJSON());
+        }
+        data["count"] = this.count;
+        return data;
+    }
+}
+
+export interface IArtistListVm {
+    artists?: ArtistDto[] | undefined;
+    count?: number;
+}
+
+export class ArtistDto implements IArtistDto {
+    id?: number;
+    name?: string | undefined;
+    photo?: string | undefined;
+    albums?: ArtistAlbumsDto[] | undefined;
+
+    constructor(data?: IArtistDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.name = _data["name"];
+            this.photo = _data["photo"];
+            if (Array.isArray(_data["albums"])) {
+                this.albums = [] as any;
+                for (let item of _data["albums"])
+                    this.albums!.push(ArtistAlbumsDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): ArtistDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArtistDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["name"] = this.name;
+        data["photo"] = this.photo;
+        if (Array.isArray(this.albums)) {
+            data["albums"] = [];
+            for (let item of this.albums)
+                data["albums"].push(item.toJSON());
+        }
+        return data;
+    }
+}
+
+export interface IArtistDto {
+    id?: number;
+    name?: string | undefined;
+    photo?: string | undefined;
+    albums?: ArtistAlbumsDto[] | undefined;
+}
+
+export class ArtistAlbumsDto implements IArtistAlbumsDto {
+    title?: string | undefined;
+
+    constructor(data?: IArtistAlbumsDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.title = _data["title"];
+        }
+    }
+
+    static fromJS(data: any): ArtistAlbumsDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new ArtistAlbumsDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["title"] = this.title;
+        return data;
+    }
+}
+
+export interface IArtistAlbumsDto {
+    title?: string | undefined;
 }
 
 export class SongsListVm implements ISongsListVm {

@@ -24,11 +24,6 @@ public class GetSongsQueryHandler : IRequestHandler<GetSongsQuery, SongsListVm>
     {
         var songs = await _context.Songs.ProjectTo<SongDto>(_mapper.ConfigurationProvider).ToListAsync();
 
-        if(songs == null)
-        {
-            return null;
-        }
-
         return new SongsListVm
         {
             Songs = songs,
