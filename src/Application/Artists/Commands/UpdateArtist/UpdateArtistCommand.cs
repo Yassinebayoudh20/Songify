@@ -31,6 +31,7 @@ public class UpdateArtistCommandHandler : IRequestHandler<UpdateArtistCommand, i
         
         artist.Name = request.Name;
         artist.Photo = request.Photo;
+        
 
         _context.Artists.Update(artist);
         await _context.SaveChangesAsync(cancellationToken);

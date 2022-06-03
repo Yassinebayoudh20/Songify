@@ -15,7 +15,7 @@ using projects.Domain.Entities;
 namespace projects.Application.Artists.Queries.GetArtistById;
 public class GetArtistByIdQueryHandler : IRequestHandler<GetArtistByIdQuery, ArtistDetailsVm>
 {
-       private readonly IApplicationDbContext _context;
+    private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
 
     public GetArtistByIdQueryHandler(IApplicationDbContext context, IMapper mapper)
@@ -25,14 +25,15 @@ public class GetArtistByIdQueryHandler : IRequestHandler<GetArtistByIdQuery, Art
     }
     public async Task<ArtistDetailsVm> Handle(GetArtistByIdQuery request, CancellationToken cancellationToken)
     {
-       var artist =await  _context.Artists.Where(a => a.Id == request.Id)
-       .ProjectTo<ArtistDto>(_mapper.ConfigurationProvider)
-       .SingleOrDefaultAsync();
+        var artist = await _context.Artists.Where(a => a.Id == request.Id)
+        .ProjectTo<ArtistDto>(_mapper.ConfigurationProvider)
+        .SingleOrDefaultAsync(cancellationToken);
 
-       if(artist == null) {
-           throw new NotFoundException(nameof(Artist),artist);
-       };
+        if (artist == null)
+        {
+            throw new NotFoundException(nameof(Artist), artist);
+        };
 
-       return new ArtistDetailsVm { Artist = artist};
+        return new ArtistDetailsVm { Artist = artist };
     }
 }
