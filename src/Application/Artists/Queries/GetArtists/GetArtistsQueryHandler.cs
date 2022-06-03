@@ -25,7 +25,7 @@ public class GetArtistsQueryHandler : IRequestHandler<GetArtistsQuery, ArtistLis
         var artists =await  _context.Artists
             .Include(i => i.Albums)
             .ProjectTo<ArtistDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
         return new ArtistListVm { Artists = artists, Count = artists.Count };
     }
