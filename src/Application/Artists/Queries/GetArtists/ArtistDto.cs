@@ -15,15 +15,10 @@ public class ArtistDto :IMapFrom<Artist>
     public byte[] Photo { get; set; }
     public ICollection<ArtistAlbumsDto> Albums { get; set; }
 
-    public void Mapping(Profile profile)
-    {
-        profile.CreateMap<Artist, ArtistDto>()
-            .ForMember(m => m.Albums.Select(a => a.Title),
-                       opt => opt.MapFrom(m => m.Albums.Select(s => s.Title)));
-    }
+ 
 }
 
-public class ArtistAlbumsDto
+public class ArtistAlbumsDto : IMapFrom<Album>
 {
     public string Title { get; set; }
 }
