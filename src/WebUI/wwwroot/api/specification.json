@@ -1223,6 +1223,10 @@
             "type": "string",
             "format": "byte",
             "nullable": true
+          },
+          "albumId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -1242,6 +1246,10 @@
             "type": "string",
             "format": "byte",
             "nullable": true
+          },
+          "albumId": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
