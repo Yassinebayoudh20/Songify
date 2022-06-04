@@ -26,7 +26,7 @@ public class UpdateArtistCommandHandler : IRequestHandler<UpdateArtistCommand, i
     }
     public async Task<int> Handle(UpdateArtistCommand request, CancellationToken cancellationToken)
     {
-        var artist =await _context.Artists.Where(a => a.Id == request.Id).SingleOrDefaultAsync();
+        var artist =await _context.Artists.FindAsync(new object[] { request.Id},cancellationToken);
         if(artist==null) throw new NotFoundException(nameof(Artist),artist);
         
         artist.Name = request.Name;
