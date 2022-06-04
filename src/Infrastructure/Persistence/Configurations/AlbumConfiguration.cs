@@ -16,5 +16,6 @@ internal class AlbumConfiguration : IEntityTypeConfiguration<Album>
         builder.Property(p => p.Image).HasColumnType("image");
 
         builder.HasOne(p => p.Artist).WithMany(p => p.Albums);
+        builder.HasMany(a => a.Songs).WithOne(a => a.Album);
     }
 }

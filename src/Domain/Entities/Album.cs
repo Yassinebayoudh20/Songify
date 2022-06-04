@@ -1,6 +1,6 @@
 ﻿namespace projects.Domain.Entities;
 
-public class Album
+public class Album : BaseAuditableEntity
 {
     public Album()
     {

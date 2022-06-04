@@ -14,5 +14,7 @@ public class SongConfiguration : IEntityTypeConfiguration<Song>
     {
         builder.Property(p => p.Title).IsRequired().HasMaxLength(20);
         builder.Property(p => p.Image).HasColumnType("image");
+
+        builder.HasOne(a => a.Album).WithMany(s => s.Songs);
     }
 }
