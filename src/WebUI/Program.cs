@@ -12,22 +12,22 @@ builder.Services.AddWebUIServices();
 var app = builder.Build();
 
 //Seeding Database
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var mediator = services.GetRequiredService<IMediator>();
-        await mediator.Send(new SimpleDataSeederCommand(), CancellationToken.None);
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while initializing the database.");
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     try
+//     {
+//         var mediator = services.GetRequiredService<IMediator>();
+//         await mediator.Send(new SimpleDataSeederCommand(), CancellationToken.None);
+//     }
+//     catch (Exception ex)
+//     {
+//         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+//         logger.LogError(ex, "An error occurred while initializing the database.");
 
-    }
+//     }
 
-}
+// }
 
 
 // Configure the HTTP request pipeline.
@@ -40,6 +40,8 @@ if (app.Environment.IsDevelopment())
     using (var scope = app.Services.CreateScope())
     {
         var initialiser = scope.ServiceProvider.GetRequiredService<ApplicationDbContextInitialiser>();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        await mediator.Send(new SimpleDataSeederCommand(), CancellationToken.None);
         await initialiser.InitialiseAsync();
         await initialiser.SeedAsync();
     }
