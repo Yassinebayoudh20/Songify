@@ -12,6 +12,7 @@ public class CreateSongCommand : IRequest<int>
 {
     public string Title { get; set; }
     public byte[] Image { get; set; }
+    public int AlbumId { get; set; }
 }
 
 public class CreateSongCommandHandler : IRequestHandler<CreateSongCommand, int>
@@ -26,6 +27,7 @@ public class CreateSongCommandHandler : IRequestHandler<CreateSongCommand, int>
         var song = new Song();
         song.Title = request.Title;
         song.Image = request.Image;
+        song.AlbumId = request.AlbumId;
 
         _context.Songs.Add(song);
 

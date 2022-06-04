@@ -14,6 +14,7 @@ public class UpdateSongCommand : IRequest
     public int Id { get; set; }
     public string Title { get; set; }
     public byte[] Image { get; set; }
+    public int AlbumId { get; set; }
 }
 
 public class UpdateSongCommandHandler : IRequestHandler<UpdateSongCommand>
@@ -36,6 +37,7 @@ public class UpdateSongCommandHandler : IRequestHandler<UpdateSongCommand>
 
         song.Title = request.Title;
         song.Image = request.Image;
+        song.AlbumId = request.AlbumId;
 
         await _context.SaveChangesAsync(cancellationToken);
 

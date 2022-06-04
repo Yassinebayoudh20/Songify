@@ -29,7 +29,7 @@ namespace Application.Albums.Commands.UpdateAlbum
         }
         public async Task<int> Handle(UpdateAlbumCommand request, CancellationToken cancellationToken)
         {
-            var album = await _context.Albums.Where(a => a.Id == request.Id).SingleOrDefaultAsync();
+            var album = await _context.Albums.FindAsync(new object[] { request.Id},cancellationToken);
 
             album.Title = request.Title;
             album.Image = request.Image;
