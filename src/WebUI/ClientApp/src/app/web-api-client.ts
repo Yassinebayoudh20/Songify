@@ -2095,6 +2095,7 @@ export interface ISongDetailsVm {
 export class CreateSongCommand implements ICreateSongCommand {
     title?: string | undefined;
     image?: string | undefined;
+    albumId?: number;
 
     constructor(data?: ICreateSongCommand) {
         if (data) {
@@ -2109,6 +2110,7 @@ export class CreateSongCommand implements ICreateSongCommand {
         if (_data) {
             this.title = _data["title"];
             this.image = _data["image"];
+            this.albumId = _data["albumId"];
         }
     }
 
@@ -2123,6 +2125,7 @@ export class CreateSongCommand implements ICreateSongCommand {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
         data["image"] = this.image;
+        data["albumId"] = this.albumId;
         return data;
     }
 }
@@ -2130,12 +2133,14 @@ export class CreateSongCommand implements ICreateSongCommand {
 export interface ICreateSongCommand {
     title?: string | undefined;
     image?: string | undefined;
+    albumId?: number;
 }
 
 export class UpdateSongCommand implements IUpdateSongCommand {
     id?: number;
     title?: string | undefined;
     image?: string | undefined;
+    albumId?: number;
 
     constructor(data?: IUpdateSongCommand) {
         if (data) {
@@ -2151,6 +2156,7 @@ export class UpdateSongCommand implements IUpdateSongCommand {
             this.id = _data["id"];
             this.title = _data["title"];
             this.image = _data["image"];
+            this.albumId = _data["albumId"];
         }
     }
 
@@ -2166,6 +2172,7 @@ export class UpdateSongCommand implements IUpdateSongCommand {
         data["id"] = this.id;
         data["title"] = this.title;
         data["image"] = this.image;
+        data["albumId"] = this.albumId;
         return data;
     }
 }
@@ -2174,6 +2181,7 @@ export interface IUpdateSongCommand {
     id?: number;
     title?: string | undefined;
     image?: string | undefined;
+    albumId?: number;
 }
 
 export class PaginatedListOfTodoItemBriefDto implements IPaginatedListOfTodoItemBriefDto {
