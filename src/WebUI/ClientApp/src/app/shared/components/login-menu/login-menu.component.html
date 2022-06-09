@@ -1,0 +1,20 @@
+<ul class="navbar-nav d-flex flex-row" *ngIf="isAuthenticated | async">
+    <li class="nav-item">
+        <a  class="nav-link text-light" [routerLink]='["/authentication/profile"]' title="Manage">Hello {{ userName | async }}</a>
+    </li>
+    <li class="nav-item">
+        <button pButton pRipple type="button" class="p-button-rounded p-button-help">
+            <a [routerLink]='["/authentication/logout"]' [state]='{ local: true }' title="Logout"> 
+            <i class="pi pi-sign-out"></i>    
+            </a>
+        </button>
+    </li>
+</ul>
+<ul class="navbar-nav" *ngIf="(isAuthenticated | async) !== true">
+  <li class="nav-item">
+        <a class="nav-link text-light" [routerLink]='["/authentication/register"]'>Register</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-light" [routerLink]='["/authentication/login"]'>Login</a>
+    </li>
+</ul>
