@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { AuthorizeService } from "../../api-authorization/authorize.service";
+import { AuthorizeService } from "../../api-authorization/services/authorize.service";
 
 @Component({
   selector: "app-token-component",
