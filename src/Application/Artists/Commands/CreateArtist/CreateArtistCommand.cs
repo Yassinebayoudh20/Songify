@@ -7,10 +7,12 @@ using MediatR;
 using projects.Application.Common.Interfaces;
 using projects.Domain.Entities;
 
+
 namespace projects.Application.Artists.Commands.CreateArtist;
 public class CreateArtistCommand : IRequest<int>
 {
     public string Name { get; set; }
+    public string MusicType { get; set; }
     public byte[] Photo { get; set; }
 }
 
@@ -26,6 +28,7 @@ public class CreateArtistCommandHandler : IRequestHandler<CreateArtistCommand, i
           var artist = new Artist();
         artist.Name = request.Name;
         artist.Photo = request.Photo;
+        artist.MusicType = request.MusicType;
 
         _context.Artists.Add(artist);
 

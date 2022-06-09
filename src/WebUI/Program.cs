@@ -1,33 +1,19 @@
 using Application.System.Commands;
 using MediatR;
 using projects.Infrastructure.Persistence;
+using Microsoft.AspNetCore.Http.Json;
+using Application.Common.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddWebUIServices();
 
+
 var app = builder.Build();
-
-//Seeding Database
-// using (var scope = app.Services.CreateScope())
-// {
-//     var services = scope.ServiceProvider;
-//     try
-//     {
-//         var mediator = services.GetRequiredService<IMediator>();
-//         await mediator.Send(new SimpleDataSeederCommand(), CancellationToken.None);
-//     }
-//     catch (Exception ex)
-//     {
-//         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-//         logger.LogError(ex, "An error occurred while initializing the database.");
-
-//     }
-
-// }
 
 
 // Configure the HTTP request pipeline.

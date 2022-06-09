@@ -1,0 +1,19 @@
+<div class="artist-form">
+    <h2>{{pageTitle}}</h2>
+<form [formGroup]="artistForm" (ngSubmit)="onSubmit()">
+    <span class="p-float-label">
+        <input id="artist-name-input" type="text"  pInputText formControlName="name" [ngClass]="name?.invalid && (name?.dirty || name?.touched) ? 'ng-invalid ng-dirty' : '' "> 
+        <label for="artist-name-input">Username</label>
+    </span>
+    <span class="p-float-label">
+        <input id="artist-musicType-input" type="text"  pInputText formControlName="musicType" [ngClass]="musicType?.invalid && (musicType?.dirty || musicType?.touched) ? 'ng-invalid ng-dirty' : '' "> 
+        <label for="artist-musicType-input">Music Type</label>
+    </span>
+   <span class="p-float-label">
+    <input class="inputfile" mode="basic" type="file" id="file" name="file" formControlName="file" #file (change)="uploadFile(file.files)" >
+    <label for="file">Choose a file</label>    
+</span>
+    <img alt="Card" [style]="{width: '150px'}" src="data:image/png;base64,{{model?.photo}}">
+    <p-button [disabled]="artistForm.invalid" type="submit" label="{{buttonText}}"></p-button>
+</form>
+</div>

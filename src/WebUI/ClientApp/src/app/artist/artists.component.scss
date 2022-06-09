@@ -1,0 +1,15 @@
+.container {
+  margin-top: 2%;
+  display: flex;
+  flex-flow: row wrap;
+  position: relative;
+
+  .card-item {
+    margin: 4px;
+    flex: 0 1 calc(20% - 8px); /* <-- adjusting for margin */
+  }
+}
+
+
+
+

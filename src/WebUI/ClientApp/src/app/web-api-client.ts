@@ -1755,6 +1755,7 @@ export interface IArtistListVm {
 export class ArtistDto implements IArtistDto {
     id?: number;
     name?: string | undefined;
+    musicType?: string | undefined;
     photo?: string | undefined;
     albums?: ArtistAlbumsDto[] | undefined;
 
@@ -1771,6 +1772,7 @@ export class ArtistDto implements IArtistDto {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.musicType = _data["musicType"];
             this.photo = _data["photo"];
             if (Array.isArray(_data["albums"])) {
                 this.albums = [] as any;
@@ -1791,6 +1793,7 @@ export class ArtistDto implements IArtistDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["musicType"] = this.musicType;
         data["photo"] = this.photo;
         if (Array.isArray(this.albums)) {
             data["albums"] = [];
@@ -1804,6 +1807,7 @@ export class ArtistDto implements IArtistDto {
 export interface IArtistDto {
     id?: number;
     name?: string | undefined;
+    musicType?: string | undefined;
     photo?: string | undefined;
     albums?: ArtistAlbumsDto[] | undefined;
 }
@@ -1882,6 +1886,7 @@ export interface IArtistDetailsVm {
 
 export class CreateArtistCommand implements ICreateArtistCommand {
     name?: string | undefined;
+    musicType?: string | undefined;
     photo?: string | undefined;
 
     constructor(data?: ICreateArtistCommand) {
@@ -1896,6 +1901,7 @@ export class CreateArtistCommand implements ICreateArtistCommand {
     init(_data?: any) {
         if (_data) {
             this.name = _data["name"];
+            this.musicType = _data["musicType"];
             this.photo = _data["photo"];
         }
     }
@@ -1910,6 +1916,7 @@ export class CreateArtistCommand implements ICreateArtistCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["name"] = this.name;
+        data["musicType"] = this.musicType;
         data["photo"] = this.photo;
         return data;
     }
@@ -1917,12 +1924,14 @@ export class CreateArtistCommand implements ICreateArtistCommand {
 
 export interface ICreateArtistCommand {
     name?: string | undefined;
+    musicType?: string | undefined;
     photo?: string | undefined;
 }
 
 export class UpdateArtistCommand implements IUpdateArtistCommand {
     id?: number;
     name?: string | undefined;
+    musicType?: string | undefined;
     photo?: string | undefined;
 
     constructor(data?: IUpdateArtistCommand) {
@@ -1938,6 +1947,7 @@ export class UpdateArtistCommand implements IUpdateArtistCommand {
         if (_data) {
             this.id = _data["id"];
             this.name = _data["name"];
+            this.musicType = _data["musicType"];
             this.photo = _data["photo"];
         }
     }
@@ -1953,6 +1963,7 @@ export class UpdateArtistCommand implements IUpdateArtistCommand {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["name"] = this.name;
+        data["musicType"] = this.musicType;
         data["photo"] = this.photo;
         return data;
     }
@@ -1961,6 +1972,7 @@ export class UpdateArtistCommand implements IUpdateArtistCommand {
 export interface IUpdateArtistCommand {
     id?: number;
     name?: string | undefined;
+    musicType?: string | undefined;
     photo?: string | undefined;
 }
 
@@ -2015,6 +2027,7 @@ export interface ISongsListVm {
 export class SongDto implements ISongDto {
     id?: number;
     title?: string | undefined;
+    genre?: string | undefined;
     image?: string | undefined;
 
     constructor(data?: ISongDto) {
@@ -2030,6 +2043,7 @@ export class SongDto implements ISongDto {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.genre = _data["genre"];
             this.image = _data["image"];
         }
     }
@@ -2045,6 +2059,7 @@ export class SongDto implements ISongDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["genre"] = this.genre;
         data["image"] = this.image;
         return data;
     }
@@ -2053,6 +2068,7 @@ export class SongDto implements ISongDto {
 export interface ISongDto {
     id?: number;
     title?: string | undefined;
+    genre?: string | undefined;
     image?: string | undefined;
 }
 
@@ -2094,6 +2110,7 @@ export interface ISongDetailsVm {
 
 export class CreateSongCommand implements ICreateSongCommand {
     title?: string | undefined;
+    genre?: string | undefined;
     image?: string | undefined;
     albumId?: number;
 
@@ -2109,6 +2126,7 @@ export class CreateSongCommand implements ICreateSongCommand {
     init(_data?: any) {
         if (_data) {
             this.title = _data["title"];
+            this.genre = _data["genre"];
             this.image = _data["image"];
             this.albumId = _data["albumId"];
         }
@@ -2124,6 +2142,7 @@ export class CreateSongCommand implements ICreateSongCommand {
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
         data["title"] = this.title;
+        data["genre"] = this.genre;
         data["image"] = this.image;
         data["albumId"] = this.albumId;
         return data;
@@ -2132,6 +2151,7 @@ export class CreateSongCommand implements ICreateSongCommand {
 
 export interface ICreateSongCommand {
     title?: string | undefined;
+    genre?: string | undefined;
     image?: string | undefined;
     albumId?: number;
 }
@@ -2139,6 +2159,7 @@ export interface ICreateSongCommand {
 export class UpdateSongCommand implements IUpdateSongCommand {
     id?: number;
     title?: string | undefined;
+    genre?: string | undefined;
     image?: string | undefined;
     albumId?: number;
 
@@ -2155,6 +2176,7 @@ export class UpdateSongCommand implements IUpdateSongCommand {
         if (_data) {
             this.id = _data["id"];
             this.title = _data["title"];
+            this.genre = _data["genre"];
             this.image = _data["image"];
             this.albumId = _data["albumId"];
         }
@@ -2171,6 +2193,7 @@ export class UpdateSongCommand implements IUpdateSongCommand {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["title"] = this.title;
+        data["genre"] = this.genre;
         data["image"] = this.image;
         data["albumId"] = this.albumId;
         return data;
@@ -2180,6 +2203,7 @@ export class UpdateSongCommand implements IUpdateSongCommand {
 export interface IUpdateSongCommand {
     id?: number;
     title?: string | undefined;
+    genre?: string | undefined;
     image?: string | undefined;
     albumId?: number;
 }

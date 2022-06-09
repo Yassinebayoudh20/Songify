@@ -13,6 +13,7 @@ public class UpdateSongCommand : IRequest
 {
     public int Id { get; set; }
     public string Title { get; set; }
+    public string Genre { get; set; }
     public byte[] Image { get; set; }
     public int AlbumId { get; set; }
 }
@@ -28,9 +29,9 @@ public class UpdateSongCommandHandler : IRequestHandler<UpdateSongCommand>
 
     public async Task<Unit> Handle(UpdateSongCommand request, CancellationToken cancellationToken)
     {
-        var song = await _context.Songs.FindAsync(new object[] { request.Id} , cancellationToken);
-        
-        if(song == null)
+        var song = await _context.Songs.FindAsync(new object[] { request.Id }, cancellationToken);
+
+        if (song == null)
         {
             throw new NotFoundException(nameof(Song), request.Id);
         }
@@ -38,6 +39,7 @@ public class UpdateSongCommandHandler : IRequestHandler<UpdateSongCommand>
         song.Title = request.Title;
         song.Image = request.Image;
         song.AlbumId = request.AlbumId;
+        song.Genre = request.Genre;
 
         await _context.SaveChangesAsync(cancellationToken);
 
