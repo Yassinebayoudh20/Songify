@@ -11,6 +11,7 @@ namespace projects.Application.Songs.Commands.CreateSong;
 public class CreateSongCommand : IRequest<int>
 {
     public string Title { get; set; }
+    public string Genre { get; set; }
     public byte[] Image { get; set; }
     public int AlbumId { get; set; }
 }
@@ -28,6 +29,7 @@ public class CreateSongCommandHandler : IRequestHandler<CreateSongCommand, int>
         song.Title = request.Title;
         song.Image = request.Image;
         song.AlbumId = request.AlbumId;
+        song.Genre = request.Genre;
 
         _context.Songs.Add(song);
 

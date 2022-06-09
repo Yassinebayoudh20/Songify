@@ -6,6 +6,8 @@ using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using NSwag;
 using NSwag.Generation.Processors.Security;
+using Application.Common.Helpers;
+using Newtonsoft.Json;
 
 namespace Microsoft.Extensions.DependencyInjection;
 
@@ -24,7 +26,10 @@ public static class ConfigureServices
 
         services.AddControllersWithViews(options =>
             options.Filters.Add<ApiExceptionFilterAttribute>())
-                .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
+            .AddJsonOptions(opt => opt.JsonSerializerOptions.Converters.Add(new ByteArrayConverter()))
+            
+            .AddFluentValidation(x => x.AutomaticValidationEnabled = false);
+                
 
         services.AddRazorPages();
 

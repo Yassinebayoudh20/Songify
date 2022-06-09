@@ -14,6 +14,7 @@ public class Artist : BaseAuditableEntity
 
     public int Id { get; set; }
     public string Name { get; set; }
+    public string MusicType { get; set; }
     public byte[] Photo { get; set; }
     public ICollection<Album> Albums { get; set; }
 }

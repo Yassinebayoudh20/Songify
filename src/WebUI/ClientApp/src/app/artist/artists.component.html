@@ -1,0 +1,14 @@
+<div class="container">
+<p-card *ngFor="let artist of artists$ | async" header="{{artist.name}}" subheader="{{artist.musicType}}" [style]="{width: '150px'}" styleClass="p-card-shadow" class="card-item ">
+    <ng-template pTemplate="header">
+        <img alt="Card" [style]="{width: '150px'}" src="data:image/png;base64,{{artist.photo}}">
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <button pButton pRipple type="button" (click)="editArtist(artist)" icon="pi pi-pencil" class="p-button-rounded p-button-warning"></button>
+        <button pButton pRipple type="button" (click)="deleteArtist(artist.id)" icon="pi pi-times" class="p-button-rounded p-button-danger"></button>
+    </ng-template>
+</p-card>
+</div>
+
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+<p-toast></p-toast>
