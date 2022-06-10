@@ -10,6 +10,22 @@
   }
 }
 
+::ng-deep .p-card .p-card-footer {
+  padding: 0 0 0 14% !important;
+}
+
+::ng-deep .p-card .p-card-footer button {
+  margin-right: 10px !important;
+}
+
+img {
+  float: left;
+  width:  100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+
 
 
 

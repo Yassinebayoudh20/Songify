@@ -1,19 +1,23 @@
-<div class="artist-form">
+<div class="form-container">
     <h2>{{pageTitle}}</h2>
-<form [formGroup]="artistForm" (ngSubmit)="onSubmit()">
-    <span class="p-float-label">
-        <input id="artist-name-input" type="text"  pInputText formControlName="name" [ngClass]="name?.invalid && (name?.dirty || name?.touched) ? 'ng-invalid ng-dirty' : '' "> 
-        <label for="artist-name-input">Username</label>
-    </span>
-    <span class="p-float-label">
-        <input id="artist-musicType-input" type="text"  pInputText formControlName="musicType" [ngClass]="musicType?.invalid && (musicType?.dirty || musicType?.touched) ? 'ng-invalid ng-dirty' : '' "> 
-        <label for="artist-musicType-input">Music Type</label>
-    </span>
-   <span class="p-float-label">
-    <input class="inputfile" mode="basic" type="file" id="file" name="file" formControlName="file" #file (change)="uploadFile(file.files)" >
-    <label for="file">Choose a file</label>    
-</span>
-    <img alt="Card" [style]="{width: '150px'}" src="data:image/png;base64,{{model?.photo}}">
-    <p-button [disabled]="artistForm.invalid" type="submit" label="{{buttonText}}"></p-button>
-</form>
+    <form [formGroup]="artistForm" class="artist-form" (ngSubmit)="onSubmit()">
+        <div class="form-body">
+            <span class="p-float-label">
+                <input id="artist-name-input" type="text" pInputText formControlName="name"
+                    [ngClass]="name?.invalid && (name?.dirty || name?.touched) ? 'ng-invalid ng-dirty' : '' ">
+                <label for="artist-name-input">Username</label>
+            </span>
+            <span class="p-float-label">
+                <input id="artist-musicType-input" type="text" pInputText formControlName="musicType"
+                    [ngClass]="musicType?.invalid && (musicType?.dirty || musicType?.touched) ? 'ng-invalid ng-dirty' : '' ">
+                <label for="artist-musicType-input">Music Type</label>
+            </span>
+            <app-file-upload (ImageByteArray)="patchValueForImage($event)"></app-file-upload>
+            <p-button [disabled]="artistForm.invalid" type="submit" label="{{buttonText}}"></p-button>
+        </div>
+        <div class="form-image">
+            <img alt="Card" width="250" height="250" src="data:image/png;base64,{{model?.photo}}">
+        </div>
+    </form>
+
 </div>
