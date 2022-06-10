@@ -1533,9 +1533,11 @@ export interface IAlbumListVm {
 }
 
 export class AlbumDto implements IAlbumDto {
+    id?: number;
     title?: string | undefined;
     image?: string | undefined;
-    artistId?: number | undefined;
+    artistId?: number;
+    artist?: AlbumArtistDto | undefined;
 
     constructor(data?: IAlbumDto) {
         if (data) {
@@ -1548,9 +1550,11 @@ export class AlbumDto implements IAlbumDto {
 
     init(_data?: any) {
         if (_data) {
+            this.id = _data["id"];
             this.title = _data["title"];
             this.image = _data["image"];
             this.artistId = _data["artistId"];
+            this.artist = _data["artist"] ? AlbumArtistDto.fromJS(_data["artist"]) : <any>undefined;
         }
     }
 
@@ -1563,17 +1567,61 @@ export class AlbumDto implements IAlbumDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
         data["title"] = this.title;
         data["image"] = this.image;
         data["artistId"] = this.artistId;
+        data["artist"] = this.artist ? this.artist.toJSON() : <any>undefined;
         return data;
     }
 }
 
 export interface IAlbumDto {
+    id?: number;
     title?: string | undefined;
     image?: string | undefined;
-    artistId?: number | undefined;
+    artistId?: number;
+    artist?: AlbumArtistDto | undefined;
+}
+
+export class AlbumArtistDto implements IAlbumArtistDto {
+    name?: string | undefined;
+    musicType?: string | undefined;
+
+    constructor(data?: IAlbumArtistDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.name = _data["name"];
+            this.musicType = _data["musicType"];
+        }
+    }
+
+    static fromJS(data: any): AlbumArtistDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new AlbumArtistDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["name"] = this.name;
+        data["musicType"] = this.musicType;
+        return data;
+    }
+}
+
+export interface IAlbumArtistDto {
+    name?: string | undefined;
+    musicType?: string | undefined;
 }
 
 export class AlbumDetailsVm implements IAlbumDetailsVm {

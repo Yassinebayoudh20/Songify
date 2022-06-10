@@ -12,6 +12,7 @@ import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ToastModule} from 'primeng/toast';
 import { LoginMenuComponent } from './components/login-menu/login-menu.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
+import {DropdownModule} from 'primeng/dropdown';
 
 
 
@@ -36,7 +37,8 @@ import { FileUploadComponent } from './components/file-upload/file-upload.compon
     ButtonModule,
     CardModule,
     ConfirmDialogModule,
-    ToastModule
+    ToastModule,
+    DropdownModule
     
   ]
 })
