@@ -8,7 +8,7 @@ import {
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
-import { ConvertImageToBase64FromByteArray } from 'src/Helpers/Converters/byteArrayToBase64';
+import { ConvertImageToBase64AndByteArray } from 'src/Helpers/Converters/ImageToBase64AndArrayBuffer';
 
 export class ArtistForm {
   id: number | undefined;
@@ -84,16 +84,16 @@ export class ArtistFormComponent implements OnInit {
 
   onSubmit() {
     let id = this.activatedRouter.snapshot.paramMap.get('id');
+    //Here I am trying to Convert back the Photo to ArrayBuffer in order to send it to the server
+    //this.artistForm.patchValue({'photo' : ConvertImageToBase64AndByteArray._base64ToarrayBuffer(this.model.photo)})
     let artist = ArtistForm.formToArtistModel(this.artistForm);
-    
     if (id) {
       artist.id = Number(id);
       let artistCommand = new UpdateArtistCommand(artist);
 
-
       this.artistService.update(Number(id), artistCommand).subscribe(
         (response) => {
-          this.router.navigate(['artists']);
+          this.router.navigate(['admin/artists']);
         },
         (error) => {
           console.error('Something went wrong', error);
@@ -103,7 +103,7 @@ export class ArtistFormComponent implements OnInit {
       let artistCommand = new CreateArtistCommand(artist);
       this.artistService.create(artistCommand).subscribe(
         (response) => {
-          this.router.navigate(['artists']);
+          this.router.navigate(['admin/artists']);
         },
         (error) => {
           console.error('Something went wrong', error);
@@ -112,12 +112,8 @@ export class ArtistFormComponent implements OnInit {
     }
   }
 
-  async uploadFile(files: any) {
-    if (files.length === 0) { return; }
-    let fileToUpload = <File>files[0];
-    const buffer = await fileToUpload.arrayBuffer();
-    let byteArray = Array.from(new Uint8Array(buffer));
-    this.artistForm.patchValue({ 'photo' : byteArray });
+  patchValueForImage($event : any){
+    this.artistForm.patchValue({ 'photo' : $event });
   }
 
   getArtist(id: any) {
@@ -130,7 +126,7 @@ export class ArtistFormComponent implements OnInit {
       )
       .subscribe((response) => {
        this.model = ArtistForm.artisModelToForm(response);
-       this.model.photo = ConvertImageToBase64FromByteArray._arrayBufferToBase64(this.model.photo);
+       this.model.photo = ConvertImageToBase64AndByteArray._arrayBufferToBase64(this.model.photo);
        this.artistForm.patchValue({
          'name' : this.model.name,
          'musicType' : this.model.musicType,

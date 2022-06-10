@@ -11,6 +11,7 @@ import {CardModule} from 'primeng/card';
 import {ConfirmDialogModule} from 'primeng/confirmdialog';
 import {ToastModule} from 'primeng/toast';
 import { LoginMenuComponent } from './components/login-menu/login-menu.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 
 
@@ -18,7 +19,8 @@ import { LoginMenuComponent } from './components/login-menu/login-menu.component
 @NgModule({
   declarations: [
     NavMenuComponent,
-    LoginMenuComponent
+    LoginMenuComponent,
+    FileUploadComponent
   ],
   imports: [
     RouterModule,
@@ -29,6 +31,7 @@ import { LoginMenuComponent } from './components/login-menu/login-menu.component
   ],
   exports:[
     NavMenuComponent,
+    FileUploadComponent,
     InputTextModule,
     ButtonModule,
     CardModule,

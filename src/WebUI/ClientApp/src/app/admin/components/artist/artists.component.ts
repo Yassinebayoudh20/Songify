@@ -5,7 +5,7 @@ import { AlbumsClient, ArtistListVm, ArtistsClient } from '../../../web-api-clie
 import {ConfirmationService} from 'primeng/api';
 import {MessageService} from 'primeng/api';
 import { map } from 'rxjs/operators';
-import { ConvertImageToBase64FromByteArray } from 'src/Helpers/Converters/byteArrayToBase64';
+import { ConvertImageToBase64AndByteArray } from 'src/Helpers/Converters/ImageToBase64AndArrayBuffer';
 import { MessageServiceService } from 'src/sharedServices/message-service.service';
 
 @Component({
@@ -35,7 +35,7 @@ export class ArtistsComponent implements OnInit {
   findAllArtists(){
     this.artists$ = this.artists.findAll().pipe(
       map(data => {
-        data.artists?.map(a => a.photo  = ConvertImageToBase64FromByteArray._arrayBufferToBase64(a.photo))
+        data.artists?.map(a => a.photo  = ConvertImageToBase64AndByteArray._arrayBufferToBase64(a.photo))
         return data.artists
       })
     );
