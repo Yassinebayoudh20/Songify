@@ -27,7 +27,9 @@ export class NavMenuComponent implements OnInit {
                 {label : 'Add' , icon : "pi pi-plus-circle" , routerLink : ['admin/artists/new']}
               ]},
               {label: 'Songs' , icon : "pi pi-play" },
-              {label: 'Albums' , icon : "pi pi-book" },
+              {label: 'Albums' , icon : "pi pi-book" , routerLink : ['admin/albums'] ,items :[
+                {label : "Add"  , icon : "pi pi-plus-circle" , routerLink : ['/admin/albums/new']}
+              ] },
           ]
       },
   ];

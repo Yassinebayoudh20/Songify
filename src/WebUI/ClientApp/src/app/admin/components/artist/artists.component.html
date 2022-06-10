@@ -1,4 +1,9 @@
-<div class="container">
+<div class="main-heading">
+    <h1 >Artist List</h1>
+</div><div class="container">
+    <div *ngIf="(artists$ | async)?.length==0" class="no-record-found">
+        <h1>No Record Found !</h1>
+    </div>
 <p-card *ngFor="let artist of artists$ | async" header="{{artist.name}}" subheader="{{artist.musicType}}" [style]="{width: '150px'}" styleClass="p-card-shadow" class="card-item ">
     <ng-template pTemplate="header">
         <img alt="Card" [style]="{width: '150px'}" src="data:image/png;base64,{{artist.photo}}">

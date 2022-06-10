@@ -35,8 +35,12 @@ export class ArtistsComponent implements OnInit {
   findAllArtists(){
     this.artists$ = this.artists.findAll().pipe(
       map(data => {
-        data.artists?.map(a => a.photo  = ConvertImageToBase64AndByteArray._arrayBufferToBase64(a.photo))
+        if(data){
+           data.artists?.map(a => a.photo  = ConvertImageToBase64AndByteArray._arrayBufferToBase64(a.photo))
         return data.artists
+        }
+        return []
+       
       })
     );
   }

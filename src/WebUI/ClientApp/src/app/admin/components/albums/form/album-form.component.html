@@ -1,0 +1,21 @@
+<div class="form-container">
+    <div class="main-heading">
+        <h1 >{{pageTitle}}</h1>
+    </div>
+    <form [formGroup]="albumForm" class="album-form" (ngSubmit)="onSubmit()">
+        <div class="form-body">
+            <span class="p-float-label">
+                <input id="album-title-input" type="text" pInputText formControlName="title"
+                    [ngClass]="title?.invalid && (title?.dirty || title?.touched) ? 'ng-invalid ng-dirty' : '' ">
+                <label for="album-title-input">Title</label>
+            </span>
+            <p-dropdown [options]="artists!" formControlName="artistId" optionLabel="name" optionValue="id"></p-dropdown>
+     
+            <app-file-upload (ImageByteArray)="patchValueForImage($event)"></app-file-upload>
+            <p-button [disabled]="albumForm.invalid" type="submit" label="{{buttonText}}"></p-button>
+        </div>
+        <div class="form-image">
+        <img alt="Card" width="250" height="250" src="data:image/png;base64,{{model?.image}}"> 
+        </div>
+    </form>
+</div>

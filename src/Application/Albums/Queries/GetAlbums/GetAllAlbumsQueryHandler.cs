@@ -21,6 +21,7 @@ namespace Application.Albums.Queries.GetAlbums
         public async Task<AlbumListVm> Handle(GetAllAlbumsQuery request, CancellationToken cancellationToken)
         {
              var albums = await _context.Albums
+            .Include(al => al.Artist)
             .ProjectTo<AlbumDto>(_mapper.ConfigurationProvider)
             .ToListAsync();
 
